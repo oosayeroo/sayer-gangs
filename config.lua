@@ -1,7 +1,11 @@
 Config = {}
-Config.DebugCode = false
+Config.DebugCode = true
 Config.NotifyScript = 'qb'
 Config.Target = 'qb'
+Config.Webhooks = {
+    Enable = true,
+    URL = 'https://discord.com/api/webhooks/1324765821582708756/QJZW9PzaW4uZ8FsL9WpRjGaTo68SU_Iy4CE8Dmgp-siWhXtXf7CTnBJElIU14IuURVeS',
+}
 
 Config.MaxRepInZones = 1000 --can change to whatever you like. i prefer it high but its however you set your server up
 Config.HangAroundTimeNeededInZone = 10 -- in minutes ( time needed to be in zone without leaving to gain rep for hangaround) (not including cooldown)
@@ -13,6 +17,7 @@ Config.NotifyWarStarted = true --notofies gang members when a zone is vulnerable
 Config.RepBooster = {-- useful if you want to do temporary Booster weekends to give more rep to certain activities.
     ['drugselling'] = 1.5, -- (EXAMPLE) will multiply by this amount (less than 1 would take rep away, 1.5 would give 50% more rep, 2 would give 100% more rep etc etc)
 }
+
 Config.Wars = {
     Enable = true, -- if false will auto takeover zone when occupying gang loses all rep
     MaxWars = 5, --if max number of wards are reached it will stop people from starting more
@@ -197,9 +202,36 @@ Config.Zones = {                                                            --is
         coords = {
             { startX = 921.45, startY = -1901.45, endX = 1118.89, endY = -1708.33 },
             { startX = 505.03, startY = -1158.02, endX = 934.14, endY = -1006.57 },
-            { startX = 618.7, startY = -1708.33, endX = 1118.89, endY = -1158.02 },
+            { startX = 618.7, startY = -1708.33, endX = 1118.27, endY = -1392.36 },
+            { startX = 618.7, startY = -1158.62, endX = 934.14, endY = -1392.26 },
             { startX = 505.03, startY = -1006.57, endX = 888.46, endY = -820.90 },
             { startX = 505.03, startY = -820.90, endX = 869.70, endY = -510.0 },
+        },
+        activities = {
+            ['drugselling'] = {
+                RepAmount = 10,
+                Cooldown = 1,
+            },
+            ['carjacking'] = {
+                RepAmount = 2,
+                Cooldown = 10,
+            },
+            ['graffiti'] = {
+                RepAmount = 5,
+                Cooldown = 5,
+            },
+            ['hangaround'] = {
+                RepAmount = 2,
+                Cooldown = 60,
+            },
+        },
+    },
+    ['MURR'] = {
+        label = "Murrieta Heights",
+        decay = {time = 240, amount = 1},
+        coords = {
+            { startX = 1390.09, startY = -821.79, endX = 888.93, endY = -1005.22 },
+            { startX = 1485.03, startY = -1006.57 , endX = 934.14, endY = -1392.26 },
         },
         activities = {
             ['drugselling'] = {
@@ -225,7 +257,7 @@ Config.Zones = {                                                            --is
         decay = {time = 240, amount = 1},
         coords = {
             { startX = -63.92, startY = -1700.53, endX = 91.27, endY = -1425.40 },
-            { startX = -403.51, startY = -1425.40, endX = 359.48, endY = -1158.02 },
+            { startX = -403.51, startY = -1425.40, endX = 618.43, endY = -1158.02 },
         },
         activities = {
             ['drugselling'] = {
@@ -250,10 +282,36 @@ Config.Zones = {                                                            --is
         label = "Rancho",
         decay = {time = 240, amount = 1},
         coords = {
-            { startX = 359.48, startY = -1761.99, endX = 618.43, endY = -1158.02 },
+            { startX = 359.48, startY = -1761.99, endX = 618.43, endY = -1426.72 },
             { startX = 271.51, startY = -1761.99, endX = 359.48, endY = -1613.16 },
-            { startX = 222.40, startY = -2022.57, endX = 505.03, endY = -1761.99 },
+            { startX = 222.40, startY = -2022.57, endX = 618.43, endY = -1761.99 },
             { startX = 123.73, startY = -2168.95, endX = 505.03, endY = -2022.57 },
+        },
+        activities = {
+            ['drugselling'] = {
+                RepAmount = 10,
+                Cooldown = 1,
+            },
+            ['carjacking'] = {
+                RepAmount = 2,
+                Cooldown = 10,
+            },
+            ['graffiti'] = {
+                RepAmount = 5,
+                Cooldown = 5,
+            },
+            ['hangaround'] = {
+                RepAmount = 2,
+                Cooldown = 60,
+            },
+        },
+    },
+    ['BANNI'] = {
+        label = "Banning",
+        decay = {time = 240, amount = 1},
+        coords = {
+            { startX = 504.70, startY = -2169.65, endX = -273.60, endY = -2361.38 },
+            { startX = 121.16, startY = -2023.51, endX = -137.42, endY = -2168.58 },
         },
         activities = {
             ['drugselling'] = {
@@ -551,6 +609,10 @@ Config.Zones = {                                                            --is
         decay = {time = 240, amount = 1},
         coords = {
             { startX = 1118.89, startY = -1901.45, endX = 1485.92, endY = -1391.50 },
+            { startX = 1048.75, startY = -1901.45, endX = 1767.54, endY = -2718.08 },
+            { startX = 1969.72, startY = -932.35, endX = 1673.43, endY = -1550.59 },
+            { startX = 1485.75, startY = -1305.37, endX = 1673.43, endY = -1550.59 },
+            { startX = 1767.54, startY = -1901.45, endX = 1486.15, endY = -1551.31 },
         },
         activities = {
             ['drugselling'] = {
@@ -577,6 +639,7 @@ Config.Zones = {                                                            --is
         coords = {
             { startX = 618.7, startY = -2718.48, endX = 921.45, endY = -1708.33 },
             { startX = 921.45, startY = -2718.48, endX = 1048.54, endY = -1901.45 },
+            { startX = 506.08, startY = -2023.64, endX = 618.7, endY = -2718.48 },
         },
         activities = {
             ['drugselling'] = {
@@ -731,6 +794,51 @@ Config.Zones = {                                                            --is
             { startX = 1295.66, startY = 3812.33, endX = 1388.96, endY = 3888.02 },
             { startX = 1295.66, startY = 3741.06, endX = 1356.98, endY = 3812.33 },
             { startX = 1295.66, startY = 3713.35, endX = 1325.48, endY = 3741.06 },
+        },
+        activities = {
+            ['drugselling'] = {
+                RepAmount = 10,
+                Cooldown = 1,
+            },
+            ['carjacking'] = {
+                RepAmount = 2,
+                Cooldown = 10,
+            },
+            ['hangaround'] = {
+                RepAmount = 2,
+                Cooldown = 60,
+            },
+            ['graffiti'] = {
+                RepAmount = 5,
+                Cooldown = 5,
+            },
+        },
+    },
+    ['HARM'] = {
+        label = "Harmony",
+        decay = {time = 240, amount = 1},
+        coords = {
+            { startX = 814.77, startY = 2565.58, endX = -42.92, endY = 3140.76 },
+            --[[{ startX = 2413.98, startY = 3554.05, endX = 2807.76, endY = 4036.53 },
+            { startX = 2145.09, startY = 3554.05, endX = 2413.98, endY = 3819.50 },
+            { startX = 2145.09, startY = 3294.46, endX = 2693.05, endY = 3554.05 },
+            { startX = 2083.31, startY = 3925.83, endX = 2145.09, endY = 3954.88 },
+            { startX = 2057.38, startY = 3954.88, endX = 2145.09, endY = 4012.50 },
+            { startX = 1990.20, startY = 3973.64, endX = 2057.38, endY = 4012.51 },
+            { startX = 1976.69, startY = 3981.51, endX = 1990.20, endY = 3995.50 },
+            { startX = 1752.23, startY = 3995.50, endX = 1990.20, endY = 4012.50 },
+            { startX = 1691.23, startY = 3983.57, endX = 1752.23, endY = 4012.50 },
+            { startX = 1691.23, startY = 3967.40, endX = 1713.04, endY = 3983.58 },
+            { startX = 1446.97, startY = 3954.97, endX = 1691.23, endY = 4012.50 },
+            { startX = 1446.97, startY = 3930.21, endX = 1683.75, endY = 3954.97 },
+            { startX = 1446.97, startY = 3888.02, endX = 1508.13, endY = 3930.21 },
+            { startX = 1508.13, startY = 3888.02, endX = 1540.87, endY = 3904.46 },
+            { startX = 1532.13, startY = 3856.76, endX = 1584.82, endY = 3888.02 },
+            { startX = 1446.97, startY = 3819.74, endX = 1532.13, endY = 3888.02 },
+            { startX = 1295.66, startY = 3888.02, endX = 1446.97, endY = 4012.51 },
+            { startX = 1295.66, startY = 3812.33, endX = 1388.96, endY = 3888.02 },
+            { startX = 1295.66, startY = 3741.06, endX = 1356.98, endY = 3812.33 },
+            { startX = 1295.66, startY = 3713.35, endX = 1325.48, endY = 3741.06 },]]
         },
         activities = {
             ['drugselling'] = {

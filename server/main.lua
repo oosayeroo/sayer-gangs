@@ -12,8 +12,26 @@ AddEventHandler('onResourceStart', function(resource)
     TriggerEvent('sayer-gangs:InitialiseZones')
 end)
 
-AddEventHandler('onResourceStop', function(t) if t ~= GetCurrentResourceName() then return end
+AddEventHandler('onResourceStop', function(resource) 
+    if resource ~= GetCurrentResourceName() then 
+        return 
+    end
     
+end)
+
+AddEventHandler('playerDropped', function(reason)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    local citizenid = Player.PlayerData.citizenid
+    print("playerDropped: Citizenid: "..citizenid)
+    PlayerZones[citizenid] = nil
+end)
+
+AddEventHandler('QBCore:Server:OnPlayerUnload', function(src)
+    local Player = QBCore.Functions.GetPlayer(src)
+    local citizenid = Player.PlayerData.citizenid
+    print("playerUnloaded: Citizenid: "..citizenid)
+    PlayerZones[citizenid] = nil
 end)
 
 RegisterNetEvent('sayer-gangs:ZoneUpdate', function(zone, action)
@@ -78,7 +96,11 @@ QBCore.Functions.CreateCallback('sayer-gangs:GetAllZonesInfo', function(source, 
             FormattedZonesInfo[zone.id] = {
                 rep = zone.rep,
                 owner = zone.owner,
+                war = false,
             }
+            if Wars[zone.id] ~= nil then
+                FormattedZonesInfo[zone.id].war = true
+            end
         end
         cb(FormattedZonesInfo)
     end)
@@ -134,6 +156,8 @@ function AddZoneRep(src, activity, isInternal)
 
     SourceGang = Player.PlayerData.gang.name
 
+    if not SourceGang then return end
+
     if not Config.Gangs[SourceGang] then return end
 
     local RepToGive = activityConfig.RepAmount
@@ -163,7 +187,7 @@ function AddZoneRep(src, activity, isInternal)
                         TakeOverZone(zone, SourceGang, RepToGive)
                     end
                 else
-                    UpdateZoneRepCount(zone, newRep)
+                    UpdateZoneRepCount(zone, newRep, SourceGang)
                 end
 
                 -- Start cooldown after success
@@ -191,7 +215,8 @@ function AdjustZoneRep(currentRep, repToGive, sourceGang, ownedGang)
     return currentRep, false -- No takeover
 end
 
-function UpdateZoneRepCount(zone, amount)
+function UpdateZoneRepCount(zone, amount, gang)
+    if gang == nil then gang = 'none' end
     MySQL.update('UPDATE sayer_zones SET rep = ? WHERE id = ?', { amount, zone }, function(affectedRows)
         if affectedRows > 0 then
             DebugCode(string.format("Zone '%s' reputation updated to %d", zone, amount))
@@ -199,6 +224,11 @@ function UpdateZoneRepCount(zone, amount)
             DebugCode(string.format("Failed to update reputation for zone '%s'", zone))
         end
     end)
+    local discordData = {
+        title = "Reputation Updated",
+        message = "Reputation Updated For Zone: "..zone..", Gang: "..gang..", New Amount: "..amount,
+    }
+    SendDiscordMessage(discordData)
 end
 
 function TakeOverZone(zone, gang, points)
@@ -223,6 +253,11 @@ function TakeOverZone(zone, gang, points)
             DebugCode(string.format("Failed to take over zone '%s'", zone))
         end
     end)
+    local discordData = {
+        title = "Zone Takeover",
+        message = "Zone Takeover For Zone: "..zone..", Gang: "..gang..", Starting Reputation: "..points,
+    }
+    SendDiscordMessage(discordData)
 end
 
 function TriggerWar(zone, gang, points)
@@ -237,6 +272,11 @@ function TriggerWar(zone, gang, points)
     TriggerClientEvent('sayer-gangs:UpdateZoneBlip', -1, zone, gang, true)
     TriggerClientEvent('sayer-gangs:NotifyWarStarted', -1, zone)
     DebugCode("zone war started")
+    local discordData = {
+        title = "War Started",
+        message = "War Started For Zone: "..zone..", Gang: "..gang..", Starting War Points: "..points,
+    }
+    SendDiscordMessage(discordData)
 end
 
 
@@ -255,6 +295,12 @@ function AddZoneWarPoints(gang,zone,points)
         Wars[zone].gangs[gang] = points
         DebugCode("first entry points for zone war")
     end
+    local discordPoints = Wars[zone].gangs[gang]
+    local discordData = {
+        title = "War Points Gained",
+        message = "War Points Gained For Zone: "..zone..", Gang: "..gang..", New Points: "..discordPoints,
+    }
+    SendDiscordMessage(discordData)
 end
 
 function EndZoneWar(zone, gangs)
@@ -303,7 +349,6 @@ CreateThread(function()
     end
 end)
 
-
 function StartCooldown(citizenid, zone, activity)
     local cooldownTime = os.time() -- Save the current time
     Cooldowns[citizenid] = Cooldowns[citizenid] or {}
@@ -333,10 +378,17 @@ end
 
 -- hang around system
 
+function IsTableEmpty(tbl)
+    if tbl == nil then return true end
+    return next(tbl) == nil
+end
+
 CreateThread(function()
     while true do
         Wait(1000) -- Check every second
-        if PlayerZones ~= nil then
+
+        -- Ensure table exists and is not empty
+        if not IsTableEmpty(PlayerZones) then
             for citizenid, zoneData in pairs(PlayerZones) do
                 local zoneConfig = Config.Zones[zoneData.zone]
                 if zoneConfig then
@@ -406,7 +458,7 @@ CreateThread(function()
                         local newRep = math.max(zoneRep - decayAmount, 0) -- Prevent rep from going below 0
 
                         -- Update the database
-                        UpdateZoneRepCount(zoneId, newRep)
+                        UpdateZoneRepCount(zoneId, newRep, nil)
 
                         -- Reset owner if rep is 0
                         if newRep == 0 then
@@ -463,6 +515,25 @@ function GetZoneOwner(zone)
 end
 
 exports('GetZoneOwner',GetZoneOwner)
+
+function GetZoneOwnerWithCID(citizenid, cb)
+    local zone = PlayerZones[citizenid].zone
+    if not Config.Zones[zone] then
+        cb(nil)
+        return
+    end
+    
+    MySQL.rawExecute('SELECT * FROM sayer_zones WHERE id = ?', { zone }, function(result)
+        if result and result[1] then    
+            cb(result[1].owner)
+        else
+            cb(nil)
+        end
+    end)
+end
+
+exports('GetZoneOwnerWithCID', GetZoneOwnerWithCID)
+
 
 function GetZoneRep(zone)
     local retval = nil
@@ -552,6 +623,18 @@ end
 
 exports('IsValidGang',IsValidGang)
 
+function IsZoneWarActive(zone)
+    if Config.Zones[zone] == nil then return nil end
+    
+    if Wars[zone] ~= nil then
+        return true
+    else
+        return false
+    end
+end
+
+exports('IsZoneWarActive',IsZoneWarActive)
+
 -- ONLY FOR DEBUG AND TESTING
 QBCore.Commands.Add('swapgangzone', "Swap Zone of gang", { { name = "zone", help = "Name of zone" }, { name = "gang", help = "Name of gang" } }, true, function(source, args)
     TakeOverZone(args[1],args[2],10)
@@ -591,5 +674,34 @@ function SendNotify(src, msg, type, time, title)
         TriggerClientEvent('qs-notify:Alert', src, msg, time, type)
     elseif Config.NotifyScript == 'other' then
         --add your notify event here
+    end
+end
+
+--WEBHOOK STUFF
+
+-- RegisterNetEvent('sayer-gangs:SendDiscordMessageFromClient',function(data)
+--     SendDiscordMessage(data)
+-- end)
+
+local webhookUrl = Config.Webhooks.URL 
+function SendDiscordMessage(data)
+    local title = data.title or "Sayer Gangs"
+    local message = data.message
+    if Config.Webhooks.Enable then
+        local embedData = {
+            {
+                ['title'] = title,
+                ['color'] = 5763719,
+                ['footer'] = {
+                    ['text'] = os.date('%c'),
+                },
+                ['description'] = message,
+                ['author'] = {
+                    ['name'] = 'Sayer Gangs',
+                    ['icon_url'] = 'https://cdn.discordapp.com/attachments/1310667787244671096/1312441786823737364/square.png?ex=67795529&is=677803a9&hm=3c223595c06818f341939edb31d24a50f29d41120c16d51da6480de375f45d4c&',
+                },
+            }
+        }
+        PerformHttpRequest(webhookUrl, function() end, 'POST', json.encode({ username = 'Sayer Gangs', embeds = embedData}), { ['Content-Type'] = 'application/json' })
     end
 end

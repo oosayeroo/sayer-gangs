@@ -4,6 +4,7 @@ local ZoneBlip = {}
 local BoxZones = {}
 local PlayerGang = {}
 local PlayerLoaded = false
+local myZone = nil
 
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then
@@ -14,6 +15,11 @@ AddEventHandler('onResourceStart', function(resource)
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    PlayerGang = QBCore.Functions.GetPlayerData().gang
+    UpdateGangBlips()
+end)
+
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     PlayerGang = QBCore.Functions.GetPlayerData().gang
     UpdateGangBlips()
 end)
@@ -112,6 +118,9 @@ function UpdateGangBlips()
                     if result[zoneName] and result[zoneName].owner ~= 'none' then
                         zoneColour = Config.Gangs[result[zoneName].owner].colour
                     end
+                    if result[zoneName].war then
+                        zoneColour = 1
+                    end
 
                     for index, part in ipairs(zoneData.coords) do
                         -- Calculate the center of the rectangle
@@ -131,6 +140,12 @@ function UpdateGangBlips()
                         SetBlipAlpha(ZoneBlip[zoneName][blipKey], 64)
                         SetBlipDisplay(ZoneBlip[zoneName][blipKey], 3)
                         SetBlipAsShortRange(ZoneBlip[zoneName][blipKey], true)
+                        if result[zoneName].war then
+                            SetBlipFlashes(ZoneBlip[zoneName][blipKey], true)
+                            SetBlipFlashInterval(ZoneBlip[zoneName][blipKey], 500)
+                        else
+                            SetBlipFlashes(ZoneBlip[zoneName][blipKey], false)
+                        end
 
                         -- Create a box zone
                         BoxZones[zoneName][blipKey] = lib.zones.box({
@@ -162,6 +177,7 @@ function OnEnterZone(zoneName)
     local gang = GetGang()
     if not Config.Gangs[gang.name] then return end
     TriggerServerEvent('sayer-gangs:ZoneUpdate',zoneName, 'enter')
+    myZone = zoneName
 end
  
 function OnExitZone(zoneName)
@@ -169,11 +185,35 @@ function OnExitZone(zoneName)
     local gang = GetGang()
     if not Config.Gangs[gang.name] then return end
     TriggerServerEvent('sayer-gangs:ZoneUpdate',zoneName, 'exit')
+    myZone = nil
 end
  
 function InsideZone(zoneName) --happens every frame for player in zone
     -- print('you are inside zone ' .. zoneName)
 end
+
+function AmIZoneOwner()
+    local retval = false
+    if PlayerGang == nil or PlayerGang.name == 'none' then return false end
+    local zone = nil
+    if myZone == nil then return false end
+    zone = myZone
+    QBCore.Functions.TriggerCallback('sayer-gangs:GetAllZonesInfo', function(result)
+        if result then
+            if result[zone].owner == PlayerGang.name then
+                retval = true
+            else
+                retval = false
+            end
+        else
+            DebugCode("Error returning zone info")
+            retval = false
+        end
+    end)
+    return retval
+end
+
+exports('AmIZoneOwner',AmIZoneOwner)
 
 function DebugCode(msg)
     if Config.DebugCode then
