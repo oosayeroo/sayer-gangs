@@ -20,7 +20,7 @@ Config.RepBooster = {-- useful if you want to do temporary Booster weekends to g
 
 Config.Wars = {
     Enable = true, -- if false will auto takeover zone when occupying gang loses all rep
-    MaxWars = 5, --if max number of wards are reached it will stop people from starting more
+    MaxWars = 5, --if max number of wars are reached it will stop people from starting more
     WarsLength = 1, -- in minutes how long a war lasts
 }
 
