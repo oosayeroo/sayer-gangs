@@ -8,14 +8,17 @@ version '1.0'
 
 shared_scripts {
 	'@ox_lib/init.lua',
-    'config.lua'
+    'shared/config.lua',
+	'shared/gangs.lua',
 }
 
 client_scripts {
 	'client/main.lua',
+	'client/utils.lua',
 }
 
 server_scripts {
 	'@oxmysql/lib/MySQL.lua',
+	'server/utils.lua',
 	'server/main.lua',
 }
