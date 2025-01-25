@@ -635,45 +635,9 @@ end
 
 exports('IsZoneWarActive',IsZoneWarActive)
 
--- ONLY FOR DEBUG AND TESTING
-QBCore.Commands.Add('swapgangzone', "Swap Zone of gang", { { name = "zone", help = "Name of zone" }, { name = "gang", help = "Name of gang" } }, true, function(source, args)
-    TakeOverZone(args[1],args[2],10)
-end, 'admin')
-
-QBCore.Commands.Add('getmyplayerzone', "get current stored zone", { }, true, function(source, args)
-    local Player = QBCore.Functions.GetPlayer(source)
-    local citizenid = Player.PlayerData.citizenid
-
-    if PlayerZones[citizenid] ~= nil then
-        if PlayerZones[citizenid].zone ~= nil then
-            DebugCode("Current Stored Zone of "..citizenid.." is "..PlayerZones[citizenid].zone)
-        else
-            DebugCode("No Stored Zone For "..citizenid)
-        end
-    else
-        DebugCode("No Stored Zone For "..citizenid)
-    end
-end, 'admin')
-
 function DebugCode(msg)
     if Config.DebugCode then
         print(msg)
-    end
-end
-
-function SendNotify(src, msg, type, time, title)
-    if not title then title = "Chop Shop" end
-    if not time then time = 5000 end
-    if not type then type = 'success' end
-    if not msg then DebugCode("SendNotify Server Triggered With No Message") return end
-    if Config.NotifyScript == 'qb' then
-        TriggerClientEvent('QBCore:Notify', src, msg, type, time)
-    elseif Config.NotifyScript == 'okok' then
-        TriggerClientEvent('okokNotify:Alert', src, title, msg, time, type, false)
-    elseif Config.NotifyScript == 'qs' then
-        TriggerClientEvent('qs-notify:Alert', src, msg, time, type)
-    elseif Config.NotifyScript == 'other' then
-        --add your notify event here
     end
 end
 
