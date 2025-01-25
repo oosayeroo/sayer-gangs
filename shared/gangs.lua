@@ -1,4 +1,4 @@
-Gangs = {
+Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
     ['ballas'] = {
         colour = 27, -- find from this website -- https://docs.fivem.net/docs/game-references/blips/#blip-colors
         label = 'Ballas',

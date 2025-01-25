@@ -5,9 +5,3 @@ CREATE TABLE IF NOT EXISTS `sayer_zones` (
   PRIMARY KEY (`id`),
   KEY `owner` (`owner`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS `sayer_gangs` (
-  `citizenid` varchar(50) DEFAULT NULL,
-  `data` TEXT DEFAULT NULL,
-  PRIMARY KEY (`citizenid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

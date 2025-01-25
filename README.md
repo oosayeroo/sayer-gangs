@@ -11,16 +11,20 @@ Discord - https://discord.gg/3WYz3zaqG5
 
 ## AddRep Export (Server Side)
  - replace `src` with the source of the player doing the activity
- - replace `'drugselling'` with the activity from your `Config.Zones[zone].activities` table
+ - replace `'drugselling'` with the activity from your `Config.Zones[zone].activities` tables
 
 ```lua
 exports['sayer-gangs']:AddZoneRep(src,'drugselling')
+```
+### or trigger event from (client side) with 
+```lua
+TriggerServerEvent('sayer-gangs:AddRepClient', 'drugselling')
 ```
 
 ### Drug Selling Export (SERVER SIDE EXAMPLE)
 
  - in `qb-drugs/server/cornerselling.lua` find the event named `qb-drugs:server:sellCornerDrugs` and add the export. 
- - should look like this if base qb-drugs
+ - should look like this if base qb-drugs (as of 25/1/25)
  ```lua
  RegisterNetEvent('qb-drugs:server:sellCornerDrugs', function(drugType, amount, price)
     local src = source
@@ -42,7 +46,7 @@ exports['sayer-gangs']:AddZoneRep(src,'drugselling')
 end)
 ```
 
-## AddRep Event (CLIENT SIDE Triggerred) (qb-ambulancejob example)
+## AddRep Event (CLIENT SIDE Triggerred) (qb-ambulancejob example for when player is killed)
  - player source is not needed for client export
  - only parameter to trigger is the activity. 
 
@@ -80,7 +84,7 @@ end)
 
 ## GetZoneDetails (SERVER SIDE)
 
- - returns the owner and rep of a sepcific zone
+ - returns the owner and rep and label of a specific zone
  - replace `ROCKF` with the zone you want to get details of.
 
 ```lua

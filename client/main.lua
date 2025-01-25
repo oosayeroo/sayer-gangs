@@ -34,9 +34,9 @@ AddEventHandler('onResourceStop', function(t) if t ~= GetCurrentResourceName() t
     
 end)
 
-RegisterCommand('testAddRep',function()
-    TriggerServerEvent('sayer-gangs:testAddRep')
-end)
+-- RegisterCommand('testAddRep',function()
+--     TriggerServerEvent('sayer-gangs:AddRepClient')
+-- end)
 
 function GetGang()
     local gang = QBCore.Functions.GetPlayerData().gang
@@ -87,7 +87,7 @@ RegisterNetEvent('sayer-gangs:NotifyWarFinished',function(controllingGang, zoneI
     if not Config.NotifyWarFinished then return end
     if PlayerGang == nil or PlayerGang.name == 'none' then RemoveGangBlips() return end
     local zoneLabel = Config.Zones[zoneId].label
-    local gangLabel = QBCore.Shared.Gangs[controllingGang].label
+    local gangLabel = Gangs[controllingGang].label
     SendNotify(gangLabel.." now control "..zoneLabel, 'primary')
 end)
 
@@ -214,28 +214,3 @@ function AmIZoneOwner()
 end
 
 exports('AmIZoneOwner',AmIZoneOwner)
-
-function DebugCode(msg)
-    if Config.DebugCode then
-        print(msg)
-    end
-end
-
---notify configuration
-function SendNotify(msg,type,time,title)
-    if Config.NotifyScript == nil then DebugCode("Sayer Gangs: Config.NotifyScript Not Set!") return end
-    if not title then title = "Gang" end
-    if not time then time = 5000 end
-    if not type then type = 'success' end
-    if not msg then DebugCode("SendNotify Client Triggered With No Message") return end
-    if Config.NotifyScript == 'qb' then
-        QBCore.Functions.Notify(msg,type,time)
-    elseif Config.NotifyScript == 'okok' then
-        exports['okokNotify']:Alert(title, msg, time, type, false)
-    elseif Config.NotifyScript == 'qs' then
-        exports['qs-notify']:Alert(msg, time, type)
-    elseif Config.NotifyScript == 'other' then
-        -- add your notify here
-        exports['yournotifyscript']:Notify(msg,time,type)
-    end
-end

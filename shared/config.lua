@@ -3,11 +3,8 @@ Config.DebugCode = true
 Config.NotifyScript = 'qb'
 Config.Target = 'qb'
 Config.Webhooks = {
-    Enable = true,
-    URL = 'https://discord.com/api/webhooks/1324765821582708756/QJZW9PzaW4uZ8FsL9WpRjGaTo68SU_Iy4CE8Dmgp-siWhXtXf7CTnBJElIU14IuURVeS',
-    LogTheseThings = {
-        ['add_war_points'] = true,
-    }
+    Enable = false,
+    URL = 'CHANGEME',
 }
 
 Config.MaxRepInZones = 1000 --can change to whatever you like. i prefer it high but its however you set your server up
@@ -25,69 +22,6 @@ Config.Wars = {
     Enable = true, -- if false will auto takeover zone when occupying gang loses all rep
     MaxWars = 5, --if max number of wars are reached it will stop people from starting more
     WarsLength = 1, -- in minutes how long a war lasts
-}
-
-Config.Gangs = { --gang must be in your shared/gangs file. (only gangs in this table can interact with sayer-gangs stuff)
-    ['ballas'] = {
-        colour = 27, -- find from this website -- https://docs.fivem.net/docs/game-references/blips/#blip-colors
-        label = 'Ballas',
-        grades = {
-            ['0'] = { name = 'Recruit' },
-            ['1'] = { name = 'Enforcer' },
-            ['2'] = { name = 'Shot Caller' },
-            ['3'] = { name = 'Boss', isboss = true },
-        },
-    },
-    ['vagos'] = {
-        colour = 5,
-        label = 'Vagos',
-        grades = {
-            ['0'] = { name = 'Recruit' },
-            ['1'] = { name = 'Enforcer' },
-            ['2'] = { name = 'Shot Caller' },
-            ['3'] = { name = 'Boss', isboss = true },
-        },
-    },
-    ['lostmc'] = {
-        colour = 40,
-        label = 'The Lost MC',
-        grades = {
-            ['0'] = { name = 'Recruit' },
-            ['1'] = { name = 'Enforcer' },
-            ['2'] = { name = 'Shot Caller' },
-            ['3'] = { name = 'Boss', isboss = true },
-        },
-    },
-    ['cartel'] = {
-        colour = 52,
-        label = 'Cartel',
-        grades = {
-            ['0'] = { name = 'Recruit' },
-            ['1'] = { name = 'Enforcer' },
-            ['2'] = { name = 'Shot Caller' },
-            ['3'] = { name = 'Boss', isboss = true },
-        },
-    },
-    ['families'] = {
-        colour = 2,
-        label = 'Families',
-        grades = {
-            ['0'] = { name = 'Recruit' },
-            ['1'] = { name = 'Enforcer' },
-            ['2'] = { name = 'Shot Caller' },
-            ['3'] = { name = 'Boss', isboss = true },
-        },
-    },
-    ['triads'] = {
-        colour = 1,
-        label = 'Triads',
-        grades = {
-            ['0'] = { name = 'Recruit' },
-            ['1'] = { name = 'Enforcer' },
-            ['2'] = { name = 'Shot Caller' },
-            ['3'] = { name = 'Boss', isboss = true },
-        },
-    },
 }
 
 Config.Zones = {                                                            --is not rstricted by gta zones. so you can make as many or as little as you want.

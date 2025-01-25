@@ -106,8 +106,7 @@ QBCore.Functions.CreateCallback('sayer-gangs:GetAllZonesInfo', function(source, 
     end)
 end)
 
-RegisterNetEvent('sayer-gangs:testAddRep',function()
-    local activity = 'drugselling'
+RegisterNetEvent('sayer-gangs:AddRepClient',function(activity)
     local src = source
     AddZoneRep(src, activity,false)
 end)
@@ -158,7 +157,7 @@ function AddZoneRep(src, activity, isInternal)
 
     if not SourceGang then return end
 
-    if not Config.Gangs[SourceGang] then return end
+    if not Gangs[SourceGang] then return end
 
     local RepToGive = activityConfig.RepAmount
     if Config.RepBooster[activity] and type(Config.RepBooster[activity]) == 'number' then
@@ -234,7 +233,7 @@ end
 function TakeOverZone(zone, gang, points)
     DebugCode(string.format("Attempting to take over zone '%s' by gang '%s'", zone, gang))
 
-    if not Config.Gangs[gang] then
+    if not Gangs[gang] then
         DebugCode(string.format("Gang '%s' is not valid", gang))
         return
     end
@@ -261,7 +260,7 @@ function TakeOverZone(zone, gang, points)
 end
 
 function TriggerWar(zone, gang, points)
-    if not Config.Gangs[gang] then return end
+    if not Gangs[gang] then return end
     if not Config.Zones[zone] then return end
 
     local startTime = os.time()
@@ -282,7 +281,7 @@ end
 
 function AddZoneWarPoints(gang,zone,points)
     DebugCode("reached war points")
-    if not Config.Gangs[gang] then return end
+    if not Gangs[gang] then return end
     if not Config.Zones[zone] then return end
     if not Wars[zone] then return end
     DebugCode("all things correct, adding")
@@ -480,8 +479,7 @@ CreateThread(function()
     end
 end)
 
-
--- EXPORTS
+-- [EXPORTS]
 
 function GetZoneDetails(zone)
     local retval = nil
@@ -491,6 +489,7 @@ function GetZoneDetails(zone)
             retval = {
                 rep = result[1].rep,
                 owner = result[1].owner,
+                label = Config.Zones[zone].label
             }
         else
             retval = nil
@@ -614,7 +613,7 @@ end
 exports('IsValidZone',IsValidZone)
 
 function IsValidGang(gang)
-    if Config.Gangs[gang] ~= nil then
+    if Gangs[gang] ~= nil then
         return true
     else
         return false
@@ -635,37 +634,22 @@ end
 
 exports('IsZoneWarActive',IsZoneWarActive)
 
-function DebugCode(msg)
-    if Config.DebugCode then
-        print(msg)
+-- ONLY FOR DEBUG AND TESTING (comment these commands when in live server)
+QBCore.Commands.Add('swapgangzone', "Swap Zone of gang", { { name = "zone", help = "Name of zone" }, { name = "gang", help = "Name of gang" } }, true, function(source, args)
+    TakeOverZone(args[1],args[2],10)
+end, 'admin')
+
+QBCore.Commands.Add('getmyplayerzone', "get current stored zone", { }, true, function(source, args)
+    local Player = QBCore.Functions.GetPlayer(source)
+    local citizenid = Player.PlayerData.citizenid
+
+    if PlayerZones[citizenid] ~= nil then
+        if PlayerZones[citizenid].zone ~= nil then
+            DebugCode("Current Stored Zone of "..citizenid.." is "..PlayerZones[citizenid].zone)
+        else
+            DebugCode("No Stored Zone For "..citizenid)
+        end
+    else
+        DebugCode("No Stored Zone For "..citizenid)
     end
-end
-
---WEBHOOK STUFF
-
--- RegisterNetEvent('sayer-gangs:SendDiscordMessageFromClient',function(data)
---     SendDiscordMessage(data)
--- end)
-
-local webhookUrl = Config.Webhooks.URL 
-function SendDiscordMessage(data)
-    local title = data.title or "Sayer Gangs"
-    local message = data.message
-    if Config.Webhooks.Enable then
-        local embedData = {
-            {
-                ['title'] = title,
-                ['color'] = 5763719,
-                ['footer'] = {
-                    ['text'] = os.date('%c'),
-                },
-                ['description'] = message,
-                ['author'] = {
-                    ['name'] = 'Sayer Gangs',
-                    ['icon_url'] = 'https://cdn.discordapp.com/attachments/1310667787244671096/1312441786823737364/square.png?ex=67795529&is=677803a9&hm=3c223595c06818f341939edb31d24a50f29d41120c16d51da6480de375f45d4c&',
-                },
-            }
-        }
-        PerformHttpRequest(webhookUrl, function() end, 'POST', json.encode({ username = 'Sayer Gangs', embeds = embedData}), { ['Content-Type'] = 'application/json' })
-    end
-end
+end, 'admin')
