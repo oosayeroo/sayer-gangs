@@ -18,7 +18,7 @@ Config.RepBooster = { -- useful if you want to do temporary Booster weekends to 
     ['drugselling'] = 1.5, -- (EXAMPLE) will multiply by this amount (less than 1 would take rep away, 1.5 would give 50% more rep, 2 would give 100% more rep etc etc)
 }
 
-Config.Wars = {
+Config.Wars = { --recommend using as it feels more realistic rather than instant switch
     Enable = true, -- if false will auto takeover zone when occupying gang loses all rep
     MaxWars = 5, --if max number of wars are reached it will stop people from starting more
     WarsLength = 5, -- in minutes how long a war lasts
