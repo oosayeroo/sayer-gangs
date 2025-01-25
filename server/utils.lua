@@ -5,7 +5,7 @@ function DebugCode(msg)
 end
 
 function SendNotify(src, msg, type, time, title)
-    if not title then title = "Chop Shop" end
+    if not title then title = "Sayer Gangs" end
     if not time then time = 5000 end
     if not type then type = 'success' end
     if not msg then DebugCode("SendNotify Server Triggered With No Message") return end

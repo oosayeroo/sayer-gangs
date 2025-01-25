@@ -56,11 +56,6 @@ Config.Zones = {                                                            --is
                 RepAmount = 1,
                 Cooldown = 60,
             },
-            ['traphouserobbery'] = { --useful if using an-traphouserobbery
-                RepAmount = 50,
-                Cooldown = 60,
-                WarOnly = false,
-            },
         },
     },
     ['MORN'] = {
@@ -368,6 +363,11 @@ Config.Zones = {                                                            --is
             ['hangaround'] = {
                 RepAmount = 2,
                 Cooldown = 60,
+            },
+            ['traphouserobbery'] = { --useful if using an-traphouserobbery (preconfigured if you own an-traphouse)
+                RepAmount = 50,
+                Cooldown = 60,
+                WarOnly = false,
             },
         },
     },

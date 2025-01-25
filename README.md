@@ -12,7 +12,7 @@ Discord - https://discord.gg/3WYz3zaqG5
 ## Great Gang Related Scripts that could pair well with this one
  - `mk-bikerclubs` - make as many biker clubs as you want. [LINK](https://discord.gg/DEWp9TP7p6)
  - `md-drugs` - check `MDDRUGS.md` file for integration with that script. [LINK](https://discord.gg/qExPYJFXTM)
- - `an-traphouserobbery` - a great traphouse robbery script ideal for gang activity [LINK](https://discord.gg/94FQvA84vB)
+ - `an-traphouserobbery` - activity `traphouserobbery` is ready included in `an-traphouserobbery` [LINK](https://discord.gg/94FQvA84vB)
 
 ## AddRep Export (Server Side)
  - replace `src` with the source of the player doing the activity
