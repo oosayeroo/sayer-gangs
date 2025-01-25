@@ -51,7 +51,7 @@ RegisterNetEvent('sayer-gangs:UpdateZoneBlip',function(zone,gang,war)
         if gang == 'none' then 
             colour = 0
         else 
-            colour = Config.Gangs[gang].colour
+            colour = Gangs[gang].colour
         end
     end
     if not colour then return end
@@ -116,7 +116,7 @@ function UpdateGangBlips()
                     BoxZones[zoneName] = {} -- Initialize a subtable for the zone's boxes
                     local zoneColour = 0
                     if result[zoneName] and result[zoneName].owner ~= 'none' then
-                        zoneColour = Config.Gangs[result[zoneName].owner].colour
+                        zoneColour = Gangs[result[zoneName].owner].colour
                     end
                     if result[zoneName].war then
                         zoneColour = 1
@@ -175,7 +175,7 @@ end
 function OnEnterZone(zoneName)
     DebugCode('entered zone '..zoneName)
     local gang = GetGang()
-    if not Config.Gangs[gang.name] then return end
+    if not Gangs[gang.name] then return end
     TriggerServerEvent('sayer-gangs:ZoneUpdate',zoneName, 'enter')
     myZone = zoneName
 end
@@ -183,7 +183,7 @@ end
 function OnExitZone(zoneName)
     DebugCode('exited zone '..zoneName)
     local gang = GetGang()
-    if not Config.Gangs[gang.name] then return end
+    if not Gangs[gang.name] then return end
     TriggerServerEvent('sayer-gangs:ZoneUpdate',zoneName, 'exit')
     myZone = nil
 end
