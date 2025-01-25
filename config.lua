@@ -5,6 +5,9 @@ Config.Target = 'qb'
 Config.Webhooks = {
     Enable = true,
     URL = 'https://discord.com/api/webhooks/1324765821582708756/QJZW9PzaW4uZ8FsL9WpRjGaTo68SU_Iy4CE8Dmgp-siWhXtXf7CTnBJElIU14IuURVeS',
+    LogTheseThings = {
+        ['add_war_points'] = true,
+    }
 }
 
 Config.MaxRepInZones = 1000 --can change to whatever you like. i prefer it high but its however you set your server up
@@ -14,7 +17,7 @@ Config.NotifyLostZone = true --Notifes players of owning gang when they lose a z
 Config.NotifyWarFinished = true --Notifies gang members who won what zone when war ends
 Config.NotifyWarStarted = true --notofies gang members when a zone is vulnerable
 
-Config.RepBooster = {-- useful if you want to do temporary Booster weekends to give more rep to certain activities.
+Config.RepBooster = { -- useful if you want to do temporary Booster weekends to give more rep to certain activities.
     ['drugselling'] = 1.5, -- (EXAMPLE) will multiply by this amount (less than 1 would take rep away, 1.5 would give 50% more rep, 2 would give 100% more rep etc etc)
 }
 
@@ -63,7 +66,7 @@ Config.Zones = {                                                            --is
             },
             ['killing'] = {
                 RepAmount = 50,
-                WarOnly = true, --will only work if war is happening in this zone
+                WarOnly = true, --will only work if war is happening in this zone (will still kill players but wont add rep if not in a war zone)
             },
             ['carjacking'] = { --needs export adding to your vehicle keys script
                 RepAmount = 20,
