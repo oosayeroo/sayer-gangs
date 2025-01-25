@@ -1,3 +1,4 @@
+QBCore = exports['qb-core']:GetCoreObject()
 Config = {}
 Config.DebugCode = true
 Config.NotifyScript = 'qb'

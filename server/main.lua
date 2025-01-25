@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 
 local ControlledZones = {}
 local PlayerZones = {} --tracks which zones players are in on server side

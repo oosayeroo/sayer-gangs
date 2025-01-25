@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 local ZoneBlip = {}
 local BoxZones = {}
