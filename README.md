@@ -9,6 +9,11 @@ Discord - https://discord.gg/3WYz3zaqG5
  - add any gang from your `qb-core/shared/gangs.lua` to the `Config.Gangs` table
  - customise script as you see fit for your server
 
+## Great Gang Related Scripts that could pair well with this one
+ - `mk-bikerclubs` - make as many biker clubs as you want. [LINK](https://discord.gg/DEWp9TP7p6)
+ - `md-drugs` - check `MDDRUGS.md` file for integration with that script. [LINK](https://discord.gg/qExPYJFXTM)
+ - `an-traphouserobbery` - a great traphouse robbery script ideal for gang activity [LINK](https://discord.gg/94FQvA84vB)
+
 ## AddRep Export (Server Side)
  - replace `src` with the source of the player doing the activity
  - replace `'drugselling'` with the activity from your `Config.Zones[zone].activities` tables
@@ -98,6 +103,80 @@ exports['sayer-gangs']:GetZoneDetails('ROCKF')
  if ZoneDetails ~= nil then
     print("Owner of zone: "..ZoneDetails.owner)
     print("Rep in zone: "..ZoneDetails.rep)
+    print("label of zone: "..ZoneDetails.label)
+ end
+ ```
+
+ ## GetZoneOwner (SERVER SIDE)
+
+ - returns the owner of a specific zone
+ - replace `ROCKF` with the zone you want to get owner of.
+
+```lua
+exports['sayer-gangs']:GetZoneOwner('ROCKF')
+```
+
+ - usage example
+ ```lua
+ local zone = "ROCKF"
+ local ZoneOwner = exports['sayer-gangs']:GetZoneOwner(zone)
+ if ZoneOwner ~= nil then
+    print("Owner of zone: "..ZoneOwner)
+ end
+ ```
+
+ ## GetZoneOwnerWithCID (SERVER SIDE)
+
+ - returns the owner of a specific zone that the player with citizenid is standing in
+ - replace `CITIZENID` with the citizenid you want to use.
+
+```lua
+exports['sayer-gangs']:GetZoneOwnerWithCID('CITIZENID')
+```
+
+ - usage example
+ ```lua
+ local citizenid = "CID12345"
+ local ZoneOwner = exports['sayer-gangs']:GetZoneOwnerWithCID(citizenid)
+ if ZoneOwner ~= nil then
+    print("Owner of zone: "..ZoneOwner)
+ end
+ ```
+
+ ## GetZoneRep (SERVER SIDE)
+
+ - returns the rep of a specific zone
+ - replace `ROCKF` with the zone you want to get rep of.
+
+```lua
+exports['sayer-gangs']:GetZoneRep('ROCKF')
+```
+
+ - usage example
+ ```lua
+ local zone = "ROCKF"
+ local ZoneRep = exports['sayer-gangs']:GetZoneRep(zone)
+ print("RepAmount of zone: "..ZoneRep)
+ ```
+
+ ## IsZoneOwned (SERVER SIDE)
+
+ - returns whether a zone is owned by a gang or not
+ - replace `ROCKF` with the zone you want to check.
+
+```lua
+exports['sayer-gangs']:IsZoneOwned('ROCKF')
+```
+
+ - usage example
+ ```lua
+ local zone = "ROCKF"
+ local isOwned = exports['sayer-gangs']:IsZoneOwned(zone)
+ print("zone Owned: "..tostring(isOwned))
+ if isOwned then
+    -- do something if zone is owned
+ else
+    -- do something if zone is not owned
  end
  ```
 
@@ -135,3 +214,59 @@ exports['sayer-gangs']:GetPlayersInZone(zone)
         end
     end
 ```
+
+## IsValidZone (SERVER SIDE)
+ - returns whether zone name is a valid zone that is used within this script
+```lua
+exports['sayer-gangs']:IsValidZone(zone)
+```
+
+ - usage example
+ ```lua
+ local zone = exports['sayer-gangs']:IsValidZone('ROCKF')
+ if zone then
+    -- do something
+ end
+ ```
+
+## IsValidGang (SERVER SIDE)
+ - returns whether gang name is a valid gang that is used within this script
+```lua
+exports['sayer-gangs']:IsValidGang(gang)
+```
+
+ - usage example
+ ```lua
+ local gang = exports['sayer-gangs']:IsValidGang('ballas')
+ if gang then
+    -- do something
+ end
+ ```
+
+## IsZoneWarActive (SERVER SIDE)
+ - returns whether gang name is a valid gang that is used within this script
+```lua
+exports['sayer-gangs']:IsZoneWarActive(zone)
+```
+
+ - usage example
+ ```lua
+ local IsWarActive = exports['sayer-gangs']:IsZoneWarActive('ROCKF')
+ if IsWarActive then
+    -- do something
+ end
+ ```
+
+ ## AmIZoneOwner (CLIENT SIDE)
+ - returns whether the clients gang is the controlling gang
+```lua
+exports['sayer-gangs']:AmIZoneOwner(zone)
+```
+
+ - usage example
+ ```lua
+ local zoneOwner = exports['sayer-gangs']:AmIZoneOwner('ROCKF')
+ if zoneOwner then
+    -- do something
+ end
+ ```

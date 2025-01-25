@@ -1,7 +1,7 @@
 Config = {}
 Config.DebugCode = true
 Config.NotifyScript = 'qb'
-Config.Target = 'qb'
+Config.Target = 'qb' --not currently used but possible in future
 Config.Webhooks = {
     Enable = false,
     URL = 'CHANGEME',
@@ -21,7 +21,7 @@ Config.RepBooster = { -- useful if you want to do temporary Booster weekends to 
 Config.Wars = {
     Enable = true, -- if false will auto takeover zone when occupying gang loses all rep
     MaxWars = 5, --if max number of wars are reached it will stop people from starting more
-    WarsLength = 1, -- in minutes how long a war lasts
+    WarsLength = 5, -- in minutes how long a war lasts
 }
 
 Config.Zones = {                                                            --is not rstricted by gta zones. so you can make as many or as little as you want.
@@ -55,6 +55,11 @@ Config.Zones = {                                                            --is
             ['hangaround'] = { --hangaround is an internal activity and does not require an export
                 RepAmount = 1,
                 Cooldown = 60,
+            },
+            ['traphouserobbery'] = { --useful if using an-traphouserobbery
+                RepAmount = 50,
+                Cooldown = 60,
+                WarOnly = false,
             },
         },
     },
@@ -773,51 +778,6 @@ Config.Zones = {                                                            --is
             { startX = 1295.66, startY = 3812.33, endX = 1388.96, endY = 3888.02 },
             { startX = 1295.66, startY = 3741.06, endX = 1356.98, endY = 3812.33 },
             { startX = 1295.66, startY = 3713.35, endX = 1325.48, endY = 3741.06 },
-        },
-        activities = {
-            ['drugselling'] = {
-                RepAmount = 10,
-                Cooldown = 1,
-            },
-            ['carjacking'] = {
-                RepAmount = 2,
-                Cooldown = 10,
-            },
-            ['hangaround'] = {
-                RepAmount = 2,
-                Cooldown = 60,
-            },
-            ['graffiti'] = {
-                RepAmount = 5,
-                Cooldown = 5,
-            },
-        },
-    },
-    ['HARM'] = {
-        label = "Harmony",
-        decay = {time = 240, amount = 1},
-        coords = {
-            { startX = 814.77, startY = 2565.58, endX = -42.92, endY = 3140.76 },
-            --[[{ startX = 2413.98, startY = 3554.05, endX = 2807.76, endY = 4036.53 },
-            { startX = 2145.09, startY = 3554.05, endX = 2413.98, endY = 3819.50 },
-            { startX = 2145.09, startY = 3294.46, endX = 2693.05, endY = 3554.05 },
-            { startX = 2083.31, startY = 3925.83, endX = 2145.09, endY = 3954.88 },
-            { startX = 2057.38, startY = 3954.88, endX = 2145.09, endY = 4012.50 },
-            { startX = 1990.20, startY = 3973.64, endX = 2057.38, endY = 4012.51 },
-            { startX = 1976.69, startY = 3981.51, endX = 1990.20, endY = 3995.50 },
-            { startX = 1752.23, startY = 3995.50, endX = 1990.20, endY = 4012.50 },
-            { startX = 1691.23, startY = 3983.57, endX = 1752.23, endY = 4012.50 },
-            { startX = 1691.23, startY = 3967.40, endX = 1713.04, endY = 3983.58 },
-            { startX = 1446.97, startY = 3954.97, endX = 1691.23, endY = 4012.50 },
-            { startX = 1446.97, startY = 3930.21, endX = 1683.75, endY = 3954.97 },
-            { startX = 1446.97, startY = 3888.02, endX = 1508.13, endY = 3930.21 },
-            { startX = 1508.13, startY = 3888.02, endX = 1540.87, endY = 3904.46 },
-            { startX = 1532.13, startY = 3856.76, endX = 1584.82, endY = 3888.02 },
-            { startX = 1446.97, startY = 3819.74, endX = 1532.13, endY = 3888.02 },
-            { startX = 1295.66, startY = 3888.02, endX = 1446.97, endY = 4012.51 },
-            { startX = 1295.66, startY = 3812.33, endX = 1388.96, endY = 3888.02 },
-            { startX = 1295.66, startY = 3741.06, endX = 1356.98, endY = 3812.33 },
-            { startX = 1295.66, startY = 3713.35, endX = 1325.48, endY = 3741.06 },]]
         },
         activities = {
             ['drugselling'] = {

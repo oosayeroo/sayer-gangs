@@ -152,7 +152,7 @@ function UpdateGangBlips()
                             coords = vec3(centerX, centerY, centerZ),
                             size = vec3(width, height, 800), -- Adjust the height if necessary
                             rotation = 0, -- Adjust rotation if needed
-                            debug = false,
+                            debug = false, --DO NOT TURN ON IF IN LIVE SERVER HUUUUGE BOXES EVERYWHERE
                             inside = function()
                                 InsideZone(zoneName)
                             end,
