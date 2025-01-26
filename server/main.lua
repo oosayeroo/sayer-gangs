@@ -87,6 +87,27 @@ RegisterNetEvent('sayer-gangs:InitialiseZones', function()
     end)
 end)
 
+RegisterNetEvent('sayer-gangs:InitialiseGang', function()
+    local Player = QBCore.functions.GetPlayer(source)
+    local citizenid = Player.PlayerData.citizenid
+    MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(exisitingdata)
+        if not exisitingdata then
+            local initData = {
+                name = 'none',
+                label = 'None',
+                grades = {
+                    ['0'] = { name = 'None' },
+                },
+            }
+
+            MySQL.insert('INSERT INTO sayer_gangs (citizenid, data) VALUES (?, ?)', {
+                citizenid,
+                json.encode(initData),
+            })
+        end
+    end)
+end)
+
 QBCore.Functions.CreateCallback('sayer-gangs:GetAllZonesInfo', function(source, cb)
     local Player = QBCore.Functions.GetPlayer(source)
     MySQL.query('SELECT * FROM sayer_zones', {}, function(Zones)
@@ -152,11 +173,11 @@ function AddZoneRep(src, activity, isInternal)
 
     local SourceGang
 
-    SourceGang = Player.PlayerData.gang.name
+    SourceGang = GetGang(src)
 
     if not SourceGang then return end
 
-    if not Gangs[SourceGang] then return end
+    if not Gangs[SourceGang.name] then return end
 
     local RepToGive = activityConfig.RepAmount
     if Config.RepBooster[activity] and type(Config.RepBooster[activity]) == 'number' then
@@ -164,7 +185,7 @@ function AddZoneRep(src, activity, isInternal)
     end
 
     if Wars[zone] ~= nil then
-        AddZoneWarPoints(SourceGang,zone,RepToGive)
+        AddZoneWarPoints(SourceGang.name,zone,RepToGive)
     else
         if activityConfig.WarOnly then
             return 
@@ -175,17 +196,17 @@ function AddZoneRep(src, activity, isInternal)
                 local currentRep = result[1].rep
                 local ownedGang = result[1].owner
 
-                local newRep, takeover = AdjustZoneRep(currentRep, RepToGive, SourceGang, ownedGang)
+                local newRep, takeover = AdjustZoneRep(currentRep, RepToGive, SourceGang.name, ownedGang)
                 if takeover then
                     if Config.Wars.Enable then
                         if (Wars ~= nil and #Wars < Config.Wars.MaxWars) or Wars == nil then
-                            TriggerWar(zone, SourceGang, RepToGive)
+                            TriggerWar(zone, SourceGang.name, RepToGive)
                         end
                     else
-                        TakeOverZone(zone, SourceGang, RepToGive)
+                        TakeOverZone(zone, SourceGang.name, RepToGive)
                     end
                 else
-                    UpdateZoneRepCount(zone, newRep, SourceGang)
+                    UpdateZoneRepCount(zone, newRep, SourceGang.name)
                 end
 
                 -- Start cooldown after success

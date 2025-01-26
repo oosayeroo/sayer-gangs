@@ -1,3 +1,15 @@
+
+
+function GetGang()
+    local gang = 'none'
+    QBCore.Functions.TriggerCallback('sayer-gangs:GetGang', function(result)
+        if result then
+            gang = result
+        end
+    end)
+    return gang
+end
+
 function DebugCode(msg)
     if Config.DebugCode then
         print(msg)

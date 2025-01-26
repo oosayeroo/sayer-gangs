@@ -9,22 +9,23 @@ AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then
         return
     end
-    PlayerGang = QBCore.Functions.GetPlayerData().gang
+    PlayerGang = GetGang()
     UpdateGangBlips()
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    PlayerGang = QBCore.Functions.GetPlayerData().gang
+    PlayerGang = GetGang()
     UpdateGangBlips()
+    TriggerServerEvent('sayer-gangs:InitialiseGang')
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-    PlayerGang = QBCore.Functions.GetPlayerData().gang
+    PlayerGang = GetGang()
     UpdateGangBlips()
 end)
 
 RegisterNetEvent('QBCore:Client:OnGangUpdate', function(InfoGang)
-    PlayerGang = InfoGang
+    PlayerGang = GetGang()
 
     UpdateGangBlips()
 end)
@@ -36,11 +37,6 @@ end)
 -- RegisterCommand('testAddRep',function()
 --     TriggerServerEvent('sayer-gangs:AddRepClient')
 -- end)
-
-function GetGang()
-    local gang = QBCore.Functions.GetPlayerData().gang
-    return gang
-end
 
 RegisterNetEvent('sayer-gangs:UpdateZoneBlip',function(zone,gang,war)
     local colour = 0
@@ -187,7 +183,7 @@ function OnExitZone(zoneName)
     myZone = nil
 end
  
-function InsideZone(zoneName) --happens every frame for player in zone
+function InsideZone(zoneName) --happens every frame for player in zone (useful for markers etc)
     -- print('you are inside zone ' .. zoneName)
 end
 
