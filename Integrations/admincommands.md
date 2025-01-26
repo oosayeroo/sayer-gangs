@@ -4,7 +4,7 @@
  - make sure to go to `qb-core/server/commands.lua` and find these 2 commands
  - `gang` and `setgang` and comment them out. 
 
-## SNIPE ADMIN MENU
+## SNIPE ADMIN MENU - [LINK](https://snipe.tebex.io/package/5292212)
 
  - to add setgang command to snipe menu go to server/open.jobgang.lua
 
@@ -27,7 +27,7 @@ RegisterServerEvent("snipe-menu:server:setGang", function(playerid, gang, grade)
 end)
 ```
 
-## PS-ADMINMENU
+## PS-ADMINMENU - [LINK](https://github.com/Project-Sloth/ps-adminmenu)
  - to replace setgang command in ps-adminmenu go to `ps-adminmenu/server/players.lua` 
  - find event `ps-adminmenu:server:SetGang` and replace with the below event
 

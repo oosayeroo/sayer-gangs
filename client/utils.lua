@@ -9,6 +9,7 @@ function GetGang()
     end)
     return gang
 end
+exports('GetGang', GetGang)
 
 function DebugCode(msg)
     if Config.DebugCode then
