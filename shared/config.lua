@@ -8,6 +8,12 @@ Config.Webhooks = {
     URL = 'CHANGEME',
 }
 
+Config.AdminPermission = 'admin'
+-- commands in this script
+-- /gang [lets players check their gang]
+-- /setgang (playerid, gang, grade) [lets admins set player gang]
+-- /removegang (playerid) [lets admins remove a players gang. will revert it to gang 'none']
+
 Config.MaxRepInZones = 1000 --can change to whatever you like. i prefer it high but its however you set your server up
 Config.HangAroundTimeNeededInZone = 10 -- in minutes ( time needed to be in zone without leaving to gain rep for hangaround) (not including cooldown)
 Config.EnableDecay = true -- Toggle decay logic on/off (zones will lose x rep every x minutes)

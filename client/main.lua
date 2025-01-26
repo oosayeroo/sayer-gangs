@@ -24,7 +24,7 @@ RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     UpdateGangBlips()
 end)
 
-RegisterNetEvent('QBCore:Client:OnGangUpdate', function(InfoGang)
+RegisterNetEvent('sayer-gangs:OnGangUpdate', function()
     PlayerGang = GetGang()
 
     UpdateGangBlips()

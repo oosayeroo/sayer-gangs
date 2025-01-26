@@ -87,27 +87,6 @@ RegisterNetEvent('sayer-gangs:InitialiseZones', function()
     end)
 end)
 
-RegisterNetEvent('sayer-gangs:InitialiseGang', function()
-    local Player = QBCore.functions.GetPlayer(source)
-    local citizenid = Player.PlayerData.citizenid
-    MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(exisitingdata)
-        if not exisitingdata then
-            local initData = {
-                name = 'none',
-                label = 'None',
-                grades = {
-                    ['0'] = { name = 'None' },
-                },
-            }
-
-            MySQL.insert('INSERT INTO sayer_gangs (citizenid, data) VALUES (?, ?)', {
-                citizenid,
-                json.encode(initData),
-            })
-        end
-    end)
-end)
-
 QBCore.Functions.CreateCallback('sayer-gangs:GetAllZonesInfo', function(source, cb)
     local Player = QBCore.Functions.GetPlayer(source)
     MySQL.query('SELECT * FROM sayer_zones', {}, function(Zones)
