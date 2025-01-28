@@ -73,7 +73,7 @@ end
 exports('SetPlayerGang', SetPlayerGang)
 
 function GetGang(src)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = QBCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
     local retval = nil
     MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(Gangdata)
@@ -90,6 +90,7 @@ function GetGang(src)
     end)
     return retval
 end
+exports('GetGang',GetGang)
 
 --for client side GetGang
 QBCore.Functions.CreateCallback('sayer-gangs:GetGang', function(source, cb)
@@ -108,6 +109,108 @@ QBCore.Functions.CreateCallback('sayer-gangs:GetGang', function(source, cb)
         end
     end)
 end)
+
+function HasGangPermission(gangname, ganggrade, action)
+    local retval = false
+    if action == 'recruit' or action == 'promote' or action == 'demote' or action == 'remove' then
+        if Gangs[gangname].grades[ganggrade].isBoss or Gangs[gangname].grades[ganggrade].canRecruit then
+            retval = true
+        end
+    elseif action == 'someotherbullshit' then
+        -- do something else
+    end
+    return retval
+end
+
+function CheckGrade(gangname, ganggrade)
+    if Gangs[gangname].grades[ganggrade] ~= nil then
+        return ganggrade
+    else
+        return false
+    end
+end
+
+function GangRecruit(src, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(src, "Invalid Player ID (Argument#1)", 'error') return end
+    local Player = QBCore.Functions.GetPlayer(tonumber(args[1]))
+    if not Player then SendNotify(src, "Player Not Online", 'error') return end
+    local SourceGang = GetGang(src)
+    local PlayerGang = GetGang(tonumber(args[1]))
+
+    if not SourceGang then SendNotify(src, "No Gang Info", 'error') return end
+    if not PlayerGang then SendNotify(src, "No Gang Info", 'error') return end
+    if SourceGang.name == 'none' then SendNotify(src, "You Have No Gang", 'error') return end
+    if PlayerGang.name ~= 'none' then SendNotify(src, "You Cannot Recruit Someone In a Gang", 'error') return end
+
+    if not HasGangPermission(SourceGang.name, SourceGang.grade, 'recruit') then SendNotify(src, "You Dont Have That Permission", 'error') return end
+    
+    SetPlayerGang(tonumber(args[1]), SourceGang.name, 0)
+end
+exports('GangRecruit',GangRecruit)
+
+function GangPromote(src, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(src, "Invalid Player ID (Argument#1)", 'error') return end
+    local Player = QBCore.Functions.GetPlayer(tonumber(args[1]))
+    if not Player then SendNotify(src, "Player Not Online", 'error') return end
+    local SourceGang = GetGang(src)
+    local PlayerGang = GetGang(tonumber(args[1]))
+
+    if not SourceGang then SendNotify(src, "No Gang Info", 'error') return end --should never happen but here just incase
+    if not PlayerGang then SendNotify(src, "No Gang Info", 'error') return end
+    if SourceGang.name == 'none' then SendNotify(src, "You Have No Gang", 'error') return end
+    if PlayerGang.name ~= SourceGang.name then SendNotify(src, "You Cannot Promote Someone Outside Your Gang", 'error') return end
+
+    if not HasGangPermission(SourceGang.name, SourceGang.grade, 'promote') then SendNotify(src, "You Don't Have That Permission", 'error') return end
+
+    local nextGrade = CheckGrade(SourceGang.name, PlayerGang.grade + 1)
+    if nextGrade then
+        SetPlayerGang(tonumber(args[1]), SourceGang.name, nextGrade)
+    else
+        SendNotify(src, "Cannot Promote Further", 'error')
+    end
+end
+exports('GangPromote',GangPromote)
+
+function GangDemote(src, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(src, "Invalid Player ID (Argument#1)", 'error') return end
+    local Player = QBCore.Functions.GetPlayer(tonumber(args[1]))
+    if not Player then SendNotify(src, "Player Not Online", 'error') return end
+    local SourceGang = GetGang(src)
+    local PlayerGang = GetGang(tonumber(args[1]))
+
+    if not SourceGang then SendNotify(src, "No Gang Info", 'error') return end --should never happen but here just incase
+    if not PlayerGang then SendNotify(src, "No Gang Info", 'error') return end
+    if SourceGang.name == 'none' then SendNotify(src, "You Have No Gang", 'error') return end
+    if PlayerGang.name ~= SourceGang.name then SendNotify(src, "You Cannot Demote Someone Outside Your Gang", 'error') return end
+
+    if not HasGangPermission(SourceGang.name, SourceGang.grade, 'demote') then SendNotify(src, "You Don't Have That Permission", 'error') return end
+
+    local previousGrade = CheckGrade(SourceGang.name, PlayerGang.grade - 1)
+    if previousGrade then
+        SetPlayerGang(tonumber(args[1]), SourceGang.name, previousGrade)
+    else
+        SendNotify(src, "Cannot Demote Further", 'error')
+    end
+end
+exports('GangDemote',GangDemote)
+
+function GangRemove(src, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(src, "Invalid Player ID (Argument#1)", 'error') return end
+    local Player = QBCore.Functions.GetPlayer(tonumber(args[1]))
+    if not Player then SendNotify(src, "Player Not Online", 'error') return end
+    local SourceGang = GetGang(src)
+    local PlayerGang = GetGang(tonumber(args[1]))
+
+    if not SourceGang then SendNotify(src, "No Gang Info", 'error') return end --should never happen but here just incase
+    if not PlayerGang then SendNotify(src, "No Gang Info", 'error') return end
+    if SourceGang.name == 'none' then SendNotify(src, "You Have No Gang", 'error') return end
+    if PlayerGang.name ~= SourceGang.name then SendNotify(src, "You Cannot Remove Someone Outside Your Gang", 'error') return end
+
+    if not HasGangPermission(SourceGang.name, SourceGang.grade, 'remove') then SendNotify(src, "You Don't Have That Permission", 'error') return end
+
+    RemovePlayerGang(tonumber(args[1]))
+end
+exports('GangRemove',GangRemove)
 
 -- [COMMANDS]
 
@@ -137,3 +240,23 @@ RegisterCommand('removegang',function(source, args)
         SendNotify(source, "Player not Online", 'error')
     end
 end, Config.AdminPermission )
+
+RegisterCommand('gang_recruit',function(source, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(source, "Invalid Player ID (Argument#1)", 'error') return end
+    GangRecruit(source, args)
+end, false )
+
+RegisterCommand('gang_promote',function(source, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(source, "Invalid Player ID (Argument#1)", 'error') return end
+    GangPromote(source, args)
+end, false)
+
+RegisterCommand('gang_demote',function(source, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(source, "Invalid Player ID (Argument#1)", 'error') return end
+    GangDemote(source, args)
+end, false)
+
+RegisterCommand('gang_remove',function(source, args)
+    if not args[1] or not tonumber(args[1]) then SendNotify(source, "Invalid Player ID (Argument#1)", 'error') return end
+    GangRemove(source, args)
+end, false)

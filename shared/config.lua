@@ -13,6 +13,10 @@ Config.AdminPermission = 'admin'
 -- /gang [lets players check their gang]
 -- /setgang (playerid, gang, grade) [lets admins set player gang]
 -- /removegang (playerid) [lets admins remove a players gang. will revert it to gang 'none']
+-- /gang_recruit (playerid) [lets gang members with canRecruit perms bring new members in]
+-- /gang_promote (playerid) [lets gang members with canRecruit perms promote members ]
+-- /gang_demote (playerid) [lets gang members with canRecruit perms demote members]
+-- /gang_remove (playerid) [lets gang members with canRecruit perms remove members]
 
 Config.MaxRepInZones = 1000 --can change to whatever you like. i prefer it high but its however you set your server up
 Config.HangAroundTimeNeededInZone = 10 -- in minutes ( time needed to be in zone without leaving to gain rep for hangaround) (not including cooldown)
