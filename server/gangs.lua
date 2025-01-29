@@ -1,23 +1,24 @@
 RegisterNetEvent('sayer-gangs:InitialiseGang', function()
     local Player = QBCore.Functions.GetPlayer(source)
     local citizenid = Player.PlayerData.citizenid
-    print("starting initialise gang")
+    DebugCode("starting initialise gang")
     MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(exisitingdata)
         if not exisitingdata[1] then
-            print("existing data was nil, creating new")
+            DebugCode("existing data was nil, creating new")
             local initData = {
                 name = 'none',
                 label = 'None',
                 grade = 0,
+                gradename = "none",
             }
 
             MySQL.insert('INSERT INTO sayer_gangs (citizenid, data) VALUES (?, ?)', {
                 citizenid,
                 json.encode(initData),
             })
-            print("Added New Player")
+            DebugCode("Added New Player")
         else
-            print("existing data already there")
+            DebugCode("existing data already there")
         end
     end)
 end)
@@ -37,6 +38,7 @@ function RemovePlayerGang(src)
                 name = 'none',
                 label = 'None',
                 grade = 0,
+                gradename = "none",
             }
 
             MySQL.update('UPDATE sayer_gangs SET data = ? WHERE citizenid = ?', { json.encode(Gangdata), citizenid }, function(affectedRows)
@@ -63,6 +65,7 @@ function SetPlayerGang(src, gang, grade)
                 name = gang,
                 label = Gangs[gang].label,
                 grade = grade,
+                gradename = Gangs[gang].grades[grade].name,
             }
 
             MySQL.update('UPDATE sayer_gangs SET data = ? WHERE citizenid = ?', { json.encode(Gangdata), citizenid }, function(affectedRows)
@@ -152,6 +155,7 @@ function GangRecruit(src, args)
     if not HasGangPermission(SourceGang.name, SourceGang.grade, 'recruit') then SendNotify(src, "You Dont Have That Permission", 'error') return end
     
     SetPlayerGang(tonumber(args[1]), SourceGang.name, 0)
+    SendNotify(src, "New Member Recruited", 'success')
 end
 exports('GangRecruit',GangRecruit)
 
@@ -172,6 +176,7 @@ function GangPromote(src, args)
     local nextGrade = CheckGrade(SourceGang.name, PlayerGang.grade + 1)
     if nextGrade then
         SetPlayerGang(tonumber(args[1]), SourceGang.name, nextGrade)
+        SendNotify(src, "Gang Member Promoted", 'success')
     else
         SendNotify(src, "Cannot Promote Further", 'error')
     end
@@ -195,6 +200,7 @@ function GangDemote(src, args)
     local previousGrade = CheckGrade(SourceGang.name, PlayerGang.grade - 1)
     if previousGrade then
         SetPlayerGang(tonumber(args[1]), SourceGang.name, previousGrade)
+        SendNotify(src, "Gang Member Demoted", 'success')
     else
         SendNotify(src, "Cannot Demote Further", 'error')
     end
@@ -216,6 +222,7 @@ function GangRemove(src, args)
     if not HasGangPermission(SourceGang.name, SourceGang.grade, 'remove') then SendNotify(src, "You Don't Have That Permission", 'error') return end
 
     RemovePlayerGang(tonumber(args[1]))
+    SendNotify(src, "Gang Member Removed", 'success')
 end
 exports('GangRemove',GangRemove)
 
@@ -226,7 +233,7 @@ RegisterCommand('gang', function(source)
     local result = GetGang(src)
     print("after getgang")
     if result then
-        local Text = "Gang: [" .. result.label .. "]  Grade: [" .. result.grade .. "]"
+        local Text = "Gang: [" .. result.label .. "]  Grade: [" .. result.gradename .. "]"
         SendNotify(src, Text, 'primary', 8000)
     else
         SendNotify(src, "No gang found.", 'primary', 8000)

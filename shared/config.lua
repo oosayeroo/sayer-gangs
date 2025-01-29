@@ -39,6 +39,7 @@ Config.Zones = {                                                            --is
     ["ROCKF"] = {                                                           --must be a Unique Code
         label = "Rockford Hills",
         decay = {time = 240, amount = 1},                                                         -- Decay 1 rep every 240 minutes(4 hours) of inactivity
+        lockedTo = 'ballas', --just a placeholder. NOT WORKING RIGHT NOW
         coords = {
             { startX = -1379.12, startY = -257.26, endX = -1299.88, endY = -38.12 },
             { startX = -920.61, startY = -465.30, endX = -521.31, endY = -407.48 },
@@ -46,7 +47,7 @@ Config.Zones = {                                                            --is
             { startX = -1299.55, startY = -126.82, endX = -743.39, endY = 445.02 },
             { startX = -743.39, startY = -126.82, endX = -594.91, endY = 13.48 },
         },
-        activities = {  --all activities must be setup with the AddZoneRep export in your other scripts (qb-drugs, qb-vehiclekeys, etc)
+        activities = {  --most activities must be setup with the AddZoneRep export in your other scripts (qb-drugs, qb-vehiclekeys, etc)
             ['drugselling'] = { --see ReadMe for instruction to add to qb-drugs
                 RepAmount = 10, --amount of rep to award to the zone (if player is owner gang then increases rep else removes it from the owner gang )
                 Cooldown = 1, --in minutes so people cant spam actions to gain rep
