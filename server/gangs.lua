@@ -32,7 +32,7 @@ function RemovePlayerGang(src)
     local citizenid = Player.PlayerData.citizenid
     MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(exisitingdata)
         if exisitingdata then
-            local Gangdata = json.decode(result[1].data)
+            local Gangdata = json.decode(exisitingdata[1].data)
             Gangdata = {
                 name = 'none',
                 label = 'None',

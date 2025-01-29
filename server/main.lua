@@ -636,7 +636,7 @@ exports('IsZoneWarActive',IsZoneWarActive)
 -- ONLY FOR DEBUG AND TESTING (comment these commands when in live server)
 QBCore.Commands.Add('swapgangzone', "Swap Zone of gang", { { name = "zone", help = "Name of zone" }, { name = "gang", help = "Name of gang" } }, true, function(source, args)
     TakeOverZone(args[1],args[2],10)
-end, 'admin')
+end, Config.AdminPermission)
 
 QBCore.Commands.Add('getmyplayerzone', "get current stored zone", { }, true, function(source, args)
     local Player = QBCore.Functions.GetPlayer(source)
@@ -651,4 +651,4 @@ QBCore.Commands.Add('getmyplayerzone', "get current stored zone", { }, true, fun
     else
         DebugCode("No Stored Zone For "..citizenid)
     end
-end, 'admin')
+end, Config.AdminPermission)
