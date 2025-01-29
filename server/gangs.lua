@@ -1,8 +1,10 @@
 RegisterNetEvent('sayer-gangs:InitialiseGang', function()
-    local Player = QBCore.functions.GetPlayer(source)
+    local Player = QBCore.Functions.GetPlayer(source)
     local citizenid = Player.PlayerData.citizenid
+    print("starting initialise gang")
     MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(exisitingdata)
-        if not exisitingdata then
+        if not exisitingdata[1] then
+            print("existing data was nil, creating new")
             local initData = {
                 name = 'none',
                 label = 'None',
@@ -13,6 +15,9 @@ RegisterNetEvent('sayer-gangs:InitialiseGang', function()
                 citizenid,
                 json.encode(initData),
             })
+            print("Added New Player")
+        else
+            print("existing data already there")
         end
     end)
 end)
@@ -49,10 +54,11 @@ exports('RemovePlayerGang', RemovePlayerGang)
 
 function SetPlayerGang(src, gang, grade)
     local Player = QBCore.Functions.GetPlayer(src)
+    if not Player then print("Invalid Player") return end
     local citizenid = Player.PlayerData.citizenid
     MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(exisitingdata)
-        if exisitingdata then
-            local Gangdata = json.decode(result[1].data)
+        if exisitingdata and exisitingdata[1] then
+            local Gangdata = json.decode(exisitingdata[1].data)
             Gangdata = {
                 name = gang,
                 label = Gangs[gang].label,
@@ -73,23 +79,24 @@ end
 exports('SetPlayerGang', SetPlayerGang)
 
 function GetGang(src)
+    local p = promise.new()
     local Player = QBCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
-    local retval = nil
+
     MySQL.query('SELECT * FROM sayer_gangs WHERE citizenid = ?', {citizenid}, function(Gangdata)
         if Gangdata and Gangdata[1] then
             local FormattedData = json.decode(Gangdata[1].data)
-            if FormattedData then
-                retval = FormattedData
-            else
-                retval = nil
-            end
+            p:resolve(FormattedData)
+            print("sent Gang info back")
         else
-            retval = nil
+            p:resolve(nil)
+            print("sent nil back")
         end
     end)
-    return retval
+
+    return Citizen.Await(p)
 end
+
 exports('GetGang',GetGang)
 
 --for client side GetGang
@@ -214,17 +221,23 @@ exports('GangRemove',GangRemove)
 
 -- [COMMANDS]
 
-RegisterCommand('gang',function(source)
+RegisterCommand('gang', function(source)
     local src = source
     local result = GetGang(src)
-    local Text = "Gang: ["..result.label.."]  Grade: ["..result.grade.."]"
-    SendNotify(src, Text, 'primary', 8000)
+    print("after getgang")
+    if result then
+        local Text = "Gang: [" .. result.label .. "]  Grade: [" .. result.grade .. "]"
+        SendNotify(src, Text, 'primary', 8000)
+    else
+        SendNotify(src, "No gang found.", 'primary', 8000)
+    end
 end, false)
+
 
 RegisterCommand('setgang',function(source, args)
     local Player = QBCore.Functions.GetPlayer(tonumber(args[1]))
     if not Gangs[tostring(args[2])] then SendNotify(source, "Not a Valid Gang", 'error') return end
-    if not Gangs[tostring(args[2])][tonumber(args[3])] then SendNotify(source, "Not a Valid Gang Grade", 'error') return end
+    if not Gangs[tostring(args[2])].grades[tonumber(args[3])] then SendNotify(source, "Not a Valid Gang Grade", 'error') return end
     if Player then
         SetPlayerGang(tonumber(args[1]), tostring(args[2]), tonumber(args[3]))
     else

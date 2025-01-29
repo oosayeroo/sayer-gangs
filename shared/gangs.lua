@@ -3,14 +3,15 @@ Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
 -- name = !IMPORTANT the name which shows everywhere for that grade
 -- isBoss = optional / means this grade can controls everything the gang has collectively
 -- canRecruit = optional / allows this grade to recruit, promote, demote and remove a gang member
+-- canCollectTax = optional / allows members to collect tax from protection rackets or other businesses
     ['ballas'] = {
         colour = 27, -- find from this website -- https://docs.fivem.net/docs/game-references/blips/#blip-colors
         label = 'Ballas',
         grades = { --grades must start with 0 and be in order
             [0] = { name = 'Recruit' },
             [1] = { name = 'Enforcer' },
-            [2] = { name = 'Shot Caller', canRecruit = true, },
-            [3] = { name = 'Boss', canRecruit = true, isBoss = true },
+            [2] = { name = 'Shot Caller', canRecruit = true, canCollectTax = true },
+            [3] = { name = 'Boss', canRecruit = true, isBoss = true, canCollectTax = true },
         },
     },
     ['vagos'] = {
@@ -19,8 +20,8 @@ Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
         grades = {
             [0] = { name = 'Recruit' },
             [1] = { name = 'Enforcer' },
-            [2] = { name = 'Shot Caller', canRecruit = true, },
-            [3] = { name = 'Boss', canRecruit = true, isBoss = true },
+            [2] = { name = 'Shot Caller', canRecruit = true, canCollectTax = true },
+            [3] = { name = 'Boss', canRecruit = true, isBoss = true, canCollectTax = true },
         },
     },
     ['lostmc'] = {
@@ -29,8 +30,8 @@ Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
         grades = {
             [0] = { name = 'Recruit' },
             [1] = { name = 'Enforcer' },
-            [2] = { name = 'Shot Caller', canRecruit = true, },
-            [3] = { name = 'Boss', canRecruit = true, isBoss = true },
+            [2] = { name = 'Shot Caller', canRecruit = true, canCollectTax = true },
+            [3] = { name = 'Boss', canRecruit = true, isBoss = true, canCollectTax = true },
         },
     },
     ['cartel'] = {
@@ -39,8 +40,8 @@ Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
         grades = {
             [0] = { name = 'Recruit' },
             [1] = { name = 'Enforcer' },
-            [2] = { name = 'Shot Caller', canRecruit = true, },
-            [3] = { name = 'Boss', canRecruit = true, isBoss = true },
+            [2] = { name = 'Shot Caller', canRecruit = true, canCollectTax = true },
+            [3] = { name = 'Boss', canRecruit = true, isBoss = true, canCollectTax = true },
         },
     },
     ['families'] = {
@@ -49,8 +50,8 @@ Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
         grades = {
             [0] = { name = 'Recruit' },
             [1] = { name = 'Enforcer' },
-            [2] = { name = 'Shot Caller', canRecruit = true, },
-            [3] = { name = 'Boss', canRecruit = true, isBoss = true },
+            [2] = { name = 'Shot Caller', canRecruit = true, canCollectTax = true },
+            [3] = { name = 'Boss', canRecruit = true, isBoss = true, canCollectTax = true },
         },
     },
     ['triads'] = {
@@ -59,8 +60,8 @@ Gangs = { -- these must also be in your qb-core/shared/gangs.lua file too
         grades = {
             [0] = { name = 'Recruit' },
             [1] = { name = 'Enforcer' },
-            [2] = { name = 'Shot Caller', canRecruit = true, },
-            [3] = { name = 'Boss', canRecruit = true, isBoss = true },
+            [2] = { name = 'Shot Caller', canRecruit = true, canCollectTax = true },
+            [3] = { name = 'Boss', canRecruit = true, isBoss = true, canCollectTax = true },
         },
     },
 }

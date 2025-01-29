@@ -9,14 +9,15 @@ AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then
         return
     end
+    TriggerServerEvent('sayer-gangs:InitialiseGang')
     PlayerGang = GetGang()
     UpdateGangBlips()
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    TriggerServerEvent('sayer-gangs:InitialiseGang')
     PlayerGang = GetGang()
     UpdateGangBlips()
-    TriggerServerEvent('sayer-gangs:InitialiseGang')
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()

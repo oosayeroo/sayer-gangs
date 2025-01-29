@@ -1,8 +1,8 @@
 
-local ControlledZones = {}
-local PlayerZones = {} --tracks which zones players are in on server side
-local Cooldowns = {}
-local Wars = {}
+ControlledZones = {}
+PlayerZones = {} --tracks which zones players are in on server side
+Cooldowns = {}
+Wars = {}
 
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then

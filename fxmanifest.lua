@@ -10,6 +10,7 @@ shared_scripts {
 	'@ox_lib/init.lua',
     'shared/config.lua',
 	'shared/gangs.lua',
+	'shared/business.lua',
 }
 
 client_scripts {
