@@ -240,7 +240,6 @@ RegisterCommand('gang', function(source)
     end
 end, false)
 
-
 RegisterCommand('setgang',function(source, args)
     local Player = QBCore.Functions.GetPlayer(tonumber(args[1]))
     if not Gangs[tostring(args[2])] then SendNotify(source, "Not a Valid Gang", 'error') return end

@@ -1,3 +1,8 @@
+function IsTableEmpty(tbl)
+    if tbl == nil then return true end
+    return next(tbl) == nil
+end
+
 function DebugCode(msg)
     if Config.DebugCode then
         print(msg)
