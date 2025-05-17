@@ -2,12 +2,14 @@
 
 function GetGang()
     local gang = 'none'
+    local promise = promise.new()
     QBCore.Functions.TriggerCallback('sayer-gangs:GetGang', function(result)
         if result then
             gang = result
         end
+        promise:resolve(gang)
     end)
-    return gang
+    return Citizen.Await(promise)
 end
 exports('GetGang', GetGang)
 

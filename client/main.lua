@@ -169,19 +169,23 @@ function UpdateGangBlips()
 end
 
 function OnEnterZone(zoneName)
-    DebugCode('entered zone '..zoneName)
-    local gang = GetGang()
-    if not Gangs[gang.name] then return end
-    TriggerServerEvent('sayer-gangs:ZoneUpdate',zoneName, 'enter')
-    myZone = zoneName
+    DebugCode('entered zone ' .. zoneName)
+    CreateThread(function()
+        local gang = GetGang()
+        if not Gangs[gang.name] then return end
+        TriggerServerEvent('sayer-gangs:ZoneUpdate', zoneName, 'enter')
+        myZone = zoneName
+    end)
 end
- 
+
 function OnExitZone(zoneName)
-    DebugCode('exited zone '..zoneName)
-    local gang = GetGang()
-    if not Gangs[gang.name] then return end
-    TriggerServerEvent('sayer-gangs:ZoneUpdate',zoneName, 'exit')
-    myZone = nil
+    DebugCode('exited zone ' .. zoneName)
+    CreateThread(function()
+        local gang = GetGang()
+        if not Gangs[gang.name] then return end
+        TriggerServerEvent('sayer-gangs:ZoneUpdate', zoneName, 'exit')
+        myZone = nil
+    end)
 end
  
 function InsideZone(zoneName) --happens every frame for player in zone (useful for markers etc)
